@@ -14,10 +14,10 @@ app.use(bodyParser.urlencoded({
     extended:false
 }));
 
-const indexRoute = require('../routes/index-route');
+const indexRoute = require('./routes/index-route');
 app.use('/', indexRoute );
 
-const productRoute = require('../routes/product-route');
+const productRoute = require('./routes/product-route');
 app.use('/products', productRoute );
 
 module.exports = app;
