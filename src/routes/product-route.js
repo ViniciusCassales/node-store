@@ -1,13 +1,10 @@
 "use strict";
 
-const express = require("express");
-const router = express.Router();
-const controller = require("../controllers/product-controller");
-
-router.get('/', controller.list);
-router.get('/:id', controller.get);
-router.post('/', controller.create);
-router.put('/:id', controller.update);
-router.delete('/:id', controller.delete);
+/* Define as rotas básicas de CRUD
+@TODO criar um novo parâmetro para poder dizer quais rotas quer
+*/
+const superRoute = require("./super-route");
+var controllerName = 'product';
+var router = superRoute.init(controllerName)
 
 module.exports = router;
