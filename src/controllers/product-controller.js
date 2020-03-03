@@ -2,11 +2,11 @@
 
 const mongoose = require('mongoose')
 const Product = mongoose.model('Product')
+const repository = require('../repositories/product-repository')
 
-exports.create = (req, res, next) => {
-    var productModel = new Product(req.body);
-    productModel
-        .save()
+exports.create = (req, res) => {
+    repository
+        .create(req.body)
         .then(product=>{
             res.status(201).send(product);
         })
@@ -16,12 +16,11 @@ exports.create = (req, res, next) => {
                 ,data: e
             });
         });
-    
 };
 
-exports.list = (req, res, next) => {
-    Product
-        .find({active: true}, 'title price slug')
+exports.list = (req, res) => {
+    repository
+        .list()
         .then(product=>{
             res.status(200).send(product);
         })
@@ -33,13 +32,9 @@ exports.list = (req, res, next) => {
         });
 };
 
-exports.get = (req, res, next) => {
-    console.log(req.query);
-    Product
-        .findOne({
-            ...(req.params.field != '_id') && {active: true},
-            [req.params.field]: req.params.value
-        }, 'title description price slug tags')
+exports.get = (req, res) => {
+    repository
+        .get(req.params)
         .then(product=>{
             res.status(200).send(product);
         })
@@ -51,16 +46,9 @@ exports.get = (req, res, next) => {
         });
 };
 
-exports.update = (req, res, next) => {
-    Product
-        .findByIdAndUpdate(req.params.id, {
-            $set: {
-                price: req.body.price,
-                description: req.body.description,
-                slug: req.body.slug,
-                tags: req.body.tags
-            }
-        })
+exports.update = (req, res) => {
+    repository
+        .update(req.params, req.body)
         .then(product=>{
             res.status(200).send(product);
         })
@@ -70,14 +58,13 @@ exports.update = (req, res, next) => {
                 ,data: e
             });
         });
-    res.status(200).send(req.body);
 };
-exports.delete = (req, res, next) => {
-    Product
-        .deleteOne({_id:req.params.id})
+
+exports.delete = (req, res) => {
+    repository
+        .delete(req.params.id)
         .then(product=>{
             res.status(200).send({
-                product: product,
                 messagem : "Produto Removido com sucesso"
             });
         })
