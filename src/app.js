@@ -9,9 +9,10 @@ const app = express();
 /* Mongoose DeprecationWarning */
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 /* END Mongoose DeprecationWarning */
 
-mongoose.connect('mongodb+srv://api-user-db:Lms8h96zVLNj5DHl@cluster0-u2kkq.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost:27017', {useNewUrlParser: true});
 
 // Fazer conversão de obj->json no response
 // urlencode nos parâmetros da url
