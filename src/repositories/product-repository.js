@@ -8,7 +8,7 @@ exports.create = async(data) => {
 };
 
 exports.list = async() => {
-    const res = await Product.find({active: true}, 'title price slug');
+    const res = await Product.find({active: true});
     return res;
 };
 
@@ -16,18 +16,20 @@ exports.get = async(params) => {
     const res = await Product.findOne({
         ...(params.field != '_id') && {active: true},
         [params.field]: params.value
-    }, 'title description price slug tags');
+    });
     return res;
 };
 
 exports.update = async(params, data) => {
     await Product.findByIdAndUpdate(params.id, {
         $set: {
-            price: data.price,
-            description: data.description,
-            slug: data.slug,
-            title: data.title,
-            tags: data.tags
+            ... (data.title != undefined) && {title: data.title},
+            ... (data.slug != undefined) && {slug: data.slug},
+            ... (data.description != undefined) && {description: data.description},
+            ... (data.price != undefined) && {price: data.price},
+            ... (data.active != undefined) && {tags: data.active},
+            ... (data.tags != undefined) && {tags: data.tags},
+            ... (data.image != undefined) && {tags: data.image}
         }
     });
 };

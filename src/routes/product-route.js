@@ -1,15 +1,13 @@
 "use strict";
 
-const superRoute = require("./super-route");
-var controllerName = 'product';
-const definedRoutes = {
-    get: true,
-    getOne: true,
-    create: true,
-    update: true,
-    delete: true,
-};
+const express = require("express");
+const router= express.Router()
 
-var router = superRoute.init(controllerName, definedRoutes)
+var productController = require(`../controllers/product-controller`);
 
+router.get('/', productController.list);
+router.get('/:field/:value', productController.get);
+router.post('/', productController.create);
+router.put('/:id', productController.update);
+router.delete('/:id', productController.delete);
 module.exports = router;
